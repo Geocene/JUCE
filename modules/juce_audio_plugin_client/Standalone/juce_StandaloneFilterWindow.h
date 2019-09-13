@@ -24,6 +24,8 @@
   ==============================================================================
 */
 
+#define GEOCENE_DEMO
+
 #if JUCE_MODULE_AVAILABLE_juce_audio_plugin_client
 extern juce::AudioProcessor* JUCE_API JUCE_CALLTYPE createPluginFilterOfType (juce::AudioProcessor::WrapperType type);
 #endif
@@ -139,6 +141,9 @@ public:
                                                            : processor->getMainBusNumOutputChannels());
 
         processorHasPotentialFeedbackLoop = (inChannels > 0 && outChannels > 0);
+#ifdef GEOCENE_DEMO
+        processorHasPotentialFeedbackLoop = false;
+#endif
     }
 
     virtual void deletePlugin()
@@ -604,9 +609,11 @@ public:
        #else
         setTitleBarButtonsRequired (DocumentWindow::minimiseButton | DocumentWindow::closeButton, false);
 
+#ifndef GEOCENE_DEMO
         Component::addAndMakeVisible (optionsButton);
         optionsButton.addListener (this);
         optionsButton.setTriggeredOnMouseDown (true);
+#endif
        #endif
 
         pluginHolder.reset (new StandalonePluginHolder (settingsToUse, takeOwnershipOfSettings,
@@ -743,7 +750,9 @@ private:
                 addAndMakeVisible (editor.get());
             }
 
+#ifndef GEOCENE_DEMO
             addChildComponent (notification);
+#endif
 
             if (owner.pluginHolder->getProcessorHasPotentialFeedbackLoop())
             {

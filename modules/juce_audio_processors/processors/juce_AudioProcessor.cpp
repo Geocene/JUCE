@@ -24,6 +24,8 @@
   ==============================================================================
 */
 
+#define GEOCENE_DEMO
+
 namespace juce
 {
 
@@ -356,9 +358,10 @@ void AudioProcessor::setPlayConfigDetails (int newNumIns, int newNumOuts, double
     success &= disableNonMainBuses();
     jassert (success);
 
+#ifdef GEOCENE_DEMO
     // the processor may not support this arrangement at all
     jassert (success && newNumIns == getTotalNumInputChannels() && newNumOuts == getTotalNumOutputChannels());
-
+#endif
     setRateAndBufferSizeDetails (newSampleRate, newBlockSize);
 }
 
